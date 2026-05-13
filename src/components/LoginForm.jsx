@@ -24,15 +24,16 @@ export const LoginForm = () => {
     }
 
     try {
-      const res = await fetch(
-        `http://localhost:3000/users?email=${encodeURIComponent(formData.email)}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      // Use URL + searchParams (automatically encodes values)
+      const url = new URL("http://localhost:3000/users");
+      url.searchParams.set("email", formData.email);
+
+      const res = await fetch(url.toString(), {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+      });
 
       if (!res.ok) {
         throw new Error(`Server error: ${res.status}`);
