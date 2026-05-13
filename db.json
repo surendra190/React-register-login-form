@@ -13,13 +13,6 @@
       "email": "jane@example.com",
       "password": "456",
       "city": "ghaziabad"
-    },
-    {
-      "name": "Surendra Chaudhary",
-      "email": "surendrachaudhary19@gmail.com",
-      "password": "123",
-      "city": "Ghaziabad",
-      "id": 3
     }
   ]
 }
