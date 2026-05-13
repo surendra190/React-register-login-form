@@ -1,20 +1,29 @@
-import React, { useState } from "react";
-// import reactLogo from "./assets/react.svg";
-// import viteLogo from "./assets/vite.svg";
-// import heroImg from "./assets/hero.png";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import { RegisterForm } from "./components/RegisterForm";
 import { LoginForm } from "./components/LoginForm";
+import Home from "./components/Home";
 
 function App() {
-  // const [count, setCount] = useState(0);
-
   return (
-    <>
-      <h1>React Form</h1>
-      <RegisterForm />
-      <LoginForm />
-    </>
+    <Router>
+      <header style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>
+        <nav style={{ display: "flex", gap: "12px" }}>
+          <Link to="/">Home</Link>
+          <Link to="/register">Register</Link>
+          <Link to="/login">Login</Link>
+        </nav>
+      </header>
+
+      <main style={{ padding: "16px" }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<RegisterForm />} />
+          <Route path="/login" element={<LoginForm />} />
+        </Routes>
+      </main>
+    </Router>
   );
 }
 
