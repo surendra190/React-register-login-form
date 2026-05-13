@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Home = () => {
+const Home = () => {
   return (
     <div style={{ textAlign: "center", marginTop: 24 }}>
       <h1>Welcome</h1>
@@ -8,3 +8,4 @@ export const Home = () => {
     </div>
   );
 };
+export default Home;
