@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "password": "123",
+      "city": "delhi"
+    },
+    {
+      "id": 2,
+      "name": "Jane Doe",
+      "email": "jane@example.com",
+      "password": "456",
+      "city": "ghaziabad"
+    },
+    {
+      "name": "Surendra Chaudhary",
+      "email": "surendrachaudhary19@gmail.com",
+      "password": "123",
+      "city": "Ghaziabad",
+      "id": 3
+    }
+  ]
+}
