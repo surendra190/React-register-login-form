@@ -4,6 +4,7 @@ import "./App.css";
 import { RegisterForm } from "./components/RegisterForm";
 import { LoginForm } from "./components/LoginForm";
 import Home from "./components/Home";
+import UncontrolledForm from "./components/UncontrolledForm";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Link to="/">Home</Link>
           <Link to="/register">Register</Link>
           <Link to="/login">Login</Link>
+          <Link to="/uncontrolled">Uncontrolled form </Link>
         </nav>
       </header>
 
@@ -21,6 +23,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/login" element={<LoginForm />} />
+          <Route path="/uncontrolled" element={<UncontrolledForm />} />
         </Routes>
       </main>
     </Router>
