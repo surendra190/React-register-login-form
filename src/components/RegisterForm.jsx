@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { z } from "zod";
 
 export const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -9,34 +10,68 @@ export const RegisterForm = () => {
   });
 
   const [submitData, setSubmitData] = useState({});
+  const [errors, setErrors] = useState({});
+
+  // Zod schema
+  const schema = z.object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    city: z.string().optional(),
+  });
 
   function onChange(e) {
     const { name, value } = e.target;
     setFormData((previous) => ({ ...previous, [name]: value }));
+    // clear field error on change
+    setErrors((prev) => ({ ...prev, [name]: undefined }));
   }
 
-  function submitChange(e) {
+  async function submitChange(e) {
     e.preventDefault(); // Prevent page reload
-    setSubmitData(formData);
+    setErrors({});
+
+    // validate with zod
+    const result = schema.safeParse(formData);
+    if (!result.success) {
+      // map zod issues to simple field->message object
+      const fieldErrors = {};
+      for (const issue of result.error.issues) {
+        const key = issue.path[0] || "_form";
+        fieldErrors[key] = issue.message;
+      }
+      setErrors(fieldErrors);
+      return;
+    }
+
     try {
-      const response = fetch("http://localhost:3000/users", {
+      const res = await fetch("http://localhost:3000/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
+
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.status}`);
+      }
+
+      // optional: read response (not required)
+      // const created = await res.json();
+
+      setSubmitData(formData);
+      setFormData({ name: "", email: "", password: "", city: "" });
+      setErrors({});
     } catch (error) {
       console.error("Error submitting form data:", error);
+      setErrors({ _form: "Error submitting form data. See console." });
     }
-
-    setFormData({ name: "", email: "", password: "", city: "" });
   }
 
   return (
     <>
       <div className="bg-gray-100 flex-column p-4 w-1/2 mx-auto mt-10 rounded">
-        {/* <h1>Register</h1> */}
         <form onSubmit={submitChange} className="flex flex-col gap-4">
           <label htmlFor="name">
             Name :
@@ -47,6 +82,10 @@ export const RegisterForm = () => {
               onChange={onChange}
             />
           </label>
+          {errors.name && (
+            <div style={{ color: "red", fontSize: 12 }}>{errors.name}</div>
+          )}
+
           <label htmlFor="email">
             Email :
             <input
@@ -56,6 +95,10 @@ export const RegisterForm = () => {
               onChange={onChange}
             />
           </label>
+          {errors.email && (
+            <div style={{ color: "red", fontSize: 12 }}>{errors.email}</div>
+          )}
+
           <label htmlFor="password">
             Password :
             <input
@@ -65,6 +108,10 @@ export const RegisterForm = () => {
               onChange={onChange}
             />
           </label>
+          {errors.password && (
+            <div style={{ color: "red", fontSize: 12 }}>{errors.password}</div>
+          )}
+
           <label htmlFor="city">
             City :
             <input
@@ -74,6 +121,10 @@ export const RegisterForm = () => {
               onChange={onChange}
             />
           </label>
+          {errors.city && (
+            <div style={{ color: "red", fontSize: 12 }}>{errors.city}</div>
+          )}
+
           <div className="flex justify-center">
             <button
               className="bg-blue-600 text-white rounded w-1/4"
@@ -82,6 +133,12 @@ export const RegisterForm = () => {
               Register
             </button>
           </div>
+
+          {errors._form && (
+            <div style={{ color: "red", textAlign: "center" }}>
+              {errors._form}
+            </div>
+          )}
         </form>
 
         <div
